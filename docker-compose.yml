@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+  app:
+    build: ./_docker/laravel
+    volumes:
+      - ./src:/var/www/html
+    container_name: bron-app
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "85:80"
+    volumes:
+      - ./src:/var/www/html
+      - ./_docker/nginx/conf.d:/etc/nginx/conf.d
+    container_name: bron-nginx
+
+  db:
+    build: ./_docker/postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    container_name: bron-postgres
+
+  node:
+    build:
+      context: .
+      dockerfile: ./_docker/node/Dockerfile
+    ports:
+      - "5173:5173"
+    working_dir: /var/www/html
+    volumes:
+      - ./src:/var/www/html
+    container_name: bron-nodejs
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8080:8080"
+    container_name: bron-adminer
+
+volumes:
+  postgres_data:

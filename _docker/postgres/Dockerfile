@@ -1,0 +1,9 @@
+FROM postgres:15
+
+ENV POSTGRES_DB=laravel
+ENV POSTGRES_USER=developer
+ENV POSTGRES_PASSWORD=123
+
+EXPOSE 5432
+
+CMD ["postgres"]
